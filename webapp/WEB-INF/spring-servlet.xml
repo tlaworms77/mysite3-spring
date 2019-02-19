@@ -10,6 +10,16 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
+	<!-- validator 넘어오는 값을 제대로 있는지 확인하는 역할 -->
+	<!-- conversionService -->
+	<!-- MessageConvertor -->
+	<!-- 등을 자동으로 등록 -->
+	<mvc:annotation-driven/>
+
+	<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러  -->
+	<!-- <mvc:default-servlet-handler/> -->
+
+	<!-- annotation 설정을 하겠다.  -->
 	<context:annotation-config />
 	<context:component-scan
 		base-package="com.douzone.mysite.controller" />
