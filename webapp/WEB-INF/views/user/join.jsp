@@ -27,10 +27,10 @@ $(function(){
 		}
 		
 		//2-2. 이메일 중복체크 유무
-		if($("#img-checkemail").is(":visible") == false){
-			alert("이메일 중복 체크를 해야합니다.");
-			return false;
-		}
+// 		if($("#img-checkemail").is(":visible") == false){
+// 			alert("이메일 중복 체크를 해야합니다.");
+// 			return false;
+// 		}
 		
 		//3. 비밀번호 확인
 		if($("input[type='password']").val() == ""){
@@ -89,8 +89,7 @@ $(function(){
 		<div id="content">
 			<div id="user">
 
-				<form id="join-form" name="joinForm" method="post" action="${pageContext.servletContext.contextPath }/user">
-					<input type="hidden" name="a" value="join"/>
+				<form id="join-form" name="joinForm" method="post" action="${pageContext.servletContext.contextPath }/user/join">
 					<label class="block-label" for="name">이름</label>
 					<input id="name" name="name" type="text" value="">
 
