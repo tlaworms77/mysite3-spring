@@ -6,11 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.stereotype.Repository;
 
+import com.douzone.mysite.exception.UserDaoException;
 import com.douzone.mysite.vo.UserVo;
 
 @Repository
@@ -40,7 +38,7 @@ public class UserDao {
 		try {
 			conn = getConnection();
 
-			String sql = " insert" + "   into user" + " values ( null, ?, ?, ?, ?, now() )";
+			String sql = " inser" + "   into user" + " values ( null, ?, ?, ?, ?, now() )";
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, vo.getName());
@@ -51,7 +49,7 @@ public class UserDao {
 			count = pstmt.executeUpdate();
 
 		} catch (SQLException e) {
-			System.out.println("error :" + e);
+			throw new UserDaoException("회원 정보 저장 실패");
 		} finally {
 			// 자원 정리
 			try {
@@ -62,7 +60,7 @@ public class UserDao {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new UserDaoException("회원 정보 저장 실패");
 			}
 		}
 

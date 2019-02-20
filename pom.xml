@@ -6,14 +6,18 @@
 	<artifactId>mysite3</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	
-	<!-- 기본 프로퍼티로 공통 설정 같은 버전을 유지하려고  -->
+
+	<!-- 기본 프로퍼티로 공통 설정 같은 버전을 유지하려고 -->
 	<properties>
 		<project.build.souceEncoding>UTF-8</project.build.souceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<org.springframwork-version>4.2.1.RELEASE</org.springframwork-version>
+
+		<jcloverslf4j.version>1.7.6</jcloverslf4j.version>
+		<logback.version>1.1.1</logback.version>
+
 	</properties>
-	
+
 	<!-- 라이브러리 버전 프로퍼티로 관리 하기 -->
 	<!-- library 설정(Dependency 설정) -->
 	<dependencies>
@@ -26,6 +30,15 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${org.springframwork-version}</version>
+
+			<!-- JCL 제외 -->
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+
 		</dependency>
 
 		<!-- Spring Web Library 추가 -->
@@ -60,8 +73,20 @@
 			<version>5.1.38</version>
 		</dependency>
 
+		<!-- Logback -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${jcloverslf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>

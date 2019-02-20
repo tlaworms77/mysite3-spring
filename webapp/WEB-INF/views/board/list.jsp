@@ -20,8 +20,8 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="${pageContext.servletContext.contextPath }/board" method="post">
-					<input type="text" id="kwd" name="kwd" value="">
+				<form id="search_form" action="${pageContext.servletContext.contextPath }/board" method="get">
+					<input type="text" id="kwd" name="kwd" value="${param.kwd }">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -39,12 +39,12 @@
 							<td>${ count - status.index }</td>
 							<c:choose>
 								<c:when test="${ vo.depth == 0 }">
-									<td><a href="${pageContext.servletContext.contextPath }/board?a=view&no=${ vo.no }">${ vo.title }</a></td>
+									<td><a href="${pageContext.servletContext.contextPath }/board/view?no=${ vo.no }">${ vo.title }</a></td>
 								</c:when>
 								<c:otherwise>
 									<td style="padding-left: ${ 3 * vo.depth}px">
 										<img src="${pageContext.servletContext.contextPath }/assets/images/reply.png" width="20px">
-										<a href="${pageContext.servletContext.contextPath }/board?a=view&no=${ vo.no }">${ vo.title }</a>
+										<a href="${pageContext.servletContext.contextPath }/board/view?no=${ vo.no }">${ vo.title }</a>
 									</td>
 								</c:otherwise>
 							</c:choose>
@@ -53,7 +53,7 @@
 							<td>${ vo.writeDate }</td>
 							<td>
 							<c:if test="${not empty authuser && authuser.no == vo.userNo.no }">
-							<a href="${ pageContext.servletContext.contextPath }/board?a=deleteform&no=${ vo.no }" class="del">삭제</a>
+							<a href="${ pageContext.servletContext.contextPath }/board/delete?no=${ vo.no }" class="del">삭제</a>
 							</c:if>
 							</td>
 						</tr>
@@ -69,29 +69,29 @@
 									<a href="${ pageContext.servletContext.contextPath }/board">◀</a>
 								</c:when>
 								<c:otherwise>
-									<a href="${ pageContext.servletContext.contextPath }/board?page=${pageVo.prevPageNo}&kwd=${param.kwd}">◀</a>
+									<a href="${ pageContext.servletContext.contextPath }/board?no=${pageVo.prevPageNo}&kwd=${param.kwd}">◀</a>
 								</c:otherwise>
 							</c:choose>
 						</li>
 						<c:forEach var="i" begin="${ pageVo.startPageNo }" end="${ pageVo.endPageNo }" step="1">
 							<c:choose>
 								<c:when test="${ pageVo.pageNo == i }">
-									<li class="selected"><a href="${ pageContext.servletContext.contextPath }/board?page=${pageVo.pageNo}&kwd=${param.kwd}">${pageVo.pageNo}</a></li>
+									<li class="selected"><a href="${ pageContext.servletContext.contextPath }/board?no=${pageVo.pageNo}&kwd=${param.kwd}">${pageVo.pageNo}</a></li>
 								</c:when>
 								<c:when test="${ pageVo.pageSize < i }">
 									<li>${ i }</li>
 								</c:when>
 								<c:otherwise>
-									<li><a href="${ pageContext.servletContext.contextPath }/board?page=${i}&kwd=${param.kwd}">${i}</a></li>
+									<li><a href="${ pageContext.servletContext.contextPath }/board?no=${i}&kwd=${param.kwd}">${i}</a></li>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
 						<c:choose>
 							<c:when test="${ pageVo.pageNo < pageVo.pageSize }">
-								<li><a href="${ pageContext.servletContext.contextPath }/board?page=${pageVo.nextPageNo}&kwd=${param.kwd}">▶</a></li>
+								<li><a href="${ pageContext.servletContext.contextPath }/board?no=${pageVo.nextPageNo}&kwd=${param.kwd}">▶</a></li>
 							</c:when>
 							<c:otherwise>
-								<li><a href="${ pageContext.servletContext.contextPath }/board?page=${pageVo.pageNo}&kwd=${param.kwd}">▶</a></li>
+								<li><a href="${ pageContext.servletContext.contextPath }/board?no=${pageVo.pageNo}&kwd=${param.kwd}">▶</a></li>
 							</c:otherwise>
 						</c:choose>
 					</ul>
@@ -100,7 +100,7 @@
 				
 				<c:if test="${not empty authuser }">
 					<div class="bottom">
-						<a href="${ pageContext.servletContext.contextPath }/board?a=writeform" id="new-book">글쓰기</a>
+						<a href="${ pageContext.servletContext.contextPath }/board/write" id="new-book">글쓰기</a>
 					</div>				
 				</c:if>
 			</div>

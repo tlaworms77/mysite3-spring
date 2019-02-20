@@ -38,8 +38,8 @@
 				<div class="bottom">
 					<a href="${pageContext.servletContext.contextPath }/board">글목록</a>
 					<c:if test="${not empty authuser }">
-					<a href="${pageContext.servletContext.contextPath }/board?a=modifyview&no=${ vo.no }">글수정</a>
-					<a href="${pageContext.servletContext.contextPath }/board?a=replyform&no=${ vo.no }&g_no=${vo.groupNo}&o_no=${vo.orderNo}&depth=${vo.depth}">댓글달기</a>
+					<a href="${pageContext.servletContext.contextPath }/board/modify?no=${ vo.no }">글수정</a>
+					<a href="${pageContext.servletContext.contextPath }/board/reply?no=${ vo.no }&groupNo=${vo.groupNo}&orderNo=${vo.orderNo}&depth=${vo.depth}">댓글달기</a>
 					</c:if>
 				</div>
 			</div>

@@ -83,11 +83,21 @@ public class PageVo {
 		this.totalCount = totalCount;
 	}
 	
-	public void pageSetting(int totalCount){
-		this.pageSize = 10;
-		this.totalCount = totalCount;
+	public void pageSetting(int value){
+
+		setPageNo(value);
+		setNextPageNo(value);
+		setPrevPageNo(value);
+		setStartPageNo(value);
+		setEndPageNo(value);
 		
 		
+	}
+	@Override
+	public String toString() {
+		return "PageVo [pageSize=" + pageSize + ", firstPageNo=" + firstPageNo + ", prevPageNo=" + prevPageNo
+				+ ", startPageNo=" + startPageNo + ", pageNo=" + pageNo + ", endPageNo=" + endPageNo + ", nextPageNo="
+				+ nextPageNo + ", finalPageNo=" + finalPageNo + ", totalCount=" + totalCount + "]";
 	}
 	
 	

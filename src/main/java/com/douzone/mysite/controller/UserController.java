@@ -1,7 +1,10 @@
 package com.douzone.mysite.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,19 +19,102 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping(value="/join", method=RequestMethod.GET)
+	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String join() {
 		return "/user/join";
 	}
-	
-	@RequestMapping(value="/join", method=RequestMethod.POST)
+
+	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public String join(@ModelAttribute UserVo userVo) {
 		userService.join(userVo);
 		return "redirect:/user/joinsuccess";
 	}
-	
+
 	@RequestMapping("/joinsuccess")
 	public String joinSuccess() {
 		return "/user/joinsuccess";
 	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login(HttpSession session) {
+		System.out.println("authuser : " + session.getAttribute("authuser"));
+		if (session.getAttribute("authuser") != null) {
+			return "redirect:/";
+		}
+		return "/user/login";
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String login(HttpSession session, Model model, @ModelAttribute UserVo vo) {
+		UserVo authuser = userService.loginCheck(vo);
+
+		if (authuser == null) {
+			model.addAttribute("result", "fail");
+			return "/user/login";
+		}
+		session.setAttribute("authuser", authuser);
+		return "redirect:/";
+	}
+
+	@RequestMapping("/logout")
+	public String logout(HttpSession session) {
+		if (session != null && session.getAttribute("authuser") != null) {
+			// logout 처리
+			// session 을 날림
+			session.removeAttribute("authuser");
+			session.invalidate();
+			return "redirect:/";
+		}
+
+		// 거의 없는 경우이지만 인증이 안된 상황에서 접근한 상황 logout을
+		UserVo authUser = (UserVo) session.getAttribute("authuser");
+		if (authUser == null) {
+			return "redirect:/";
+		}
+
+		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/modify", method = RequestMethod.GET)
+	public String modify(HttpSession session, Model model) {
+		UserVo authUser = null;
+		if (session != null) {
+			authUser = (UserVo) session.getAttribute("authuser");
+		}
+		if (authUser == null) {
+			return "redirect:/";
+		}
+
+		authUser =  userService.getUserInfo(authUser.getNo());
+		model.addAttribute("authuser", authUser);
+
+		return "/user/modify";
+	}
+
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public String modify(HttpSession session, @ModelAttribute UserVo vo) {
+		if(session.getAttribute("authuser") == null) {
+			return "redirect:/";
+		}
+		
+		vo.setNo(((UserVo)session.getAttribute("authuser")).getNo());
+		
+		boolean modifySuccess = userService.modify(vo);
+		
+		if(!modifySuccess) {
+			System.out.println("회원 정보 수정 실패");
+			return "/user/modify";
+		}
+		
+		System.out.println("회원 정보 수정 성공!");
+		
+		return "redirect:/";
+	}
+	
+//	@ExceptionHandler( UserDaoException.class )
+//	public String handleUserDaoException() {
+//		// 1. 로깅작업
+//		// 2. 페이지 전환(사과 페이지)
+//		return "error/exception";
+//	}
 }
