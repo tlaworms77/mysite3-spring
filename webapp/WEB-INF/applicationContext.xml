@@ -25,15 +25,15 @@
 	</context:component-scan>
 
 	<!-- DAO 들을 스캐닝 할 수 있기 때문 -->
-	<!-- oracle datasource -->
-	<bean id="oracleDatasource"
-		class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
-		<property name="URL"
-			value="jdbc:oracle:thin:@localhost:1521:xe" />
-		<property name="user" value="webdb" />
+	<!-- Connection Pool DataSource <MySQL> -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/webdb" />
+		<property name="username" value="webdb" />
 		<property name="password" value="webdb" />
-		<property name="connectionCachingEnabled" value="true" />
-		<qualifier value="main-db" />
 	</bean>
 
 </beans>
