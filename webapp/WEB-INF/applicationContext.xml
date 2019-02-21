@@ -36,4 +36,20 @@
 		<property name="password" value="webdb" />
 	</bean>
 
+	<!-- MyBatis SqlSessionFactoryBean -->
+	<!-- 위에서 빈 설정한 dataSource(레퍼런스)를 가지고 있어야 한다. -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 마이바티스 전체 설정 -->
+		<property name="configLocation"
+			value="classpath:mybatis/configuration.xml" />
+	</bean>
+
+	<!-- MyBatis SqlSessionTemplate -->
+	<bean id="sqlSession"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
 </beans>

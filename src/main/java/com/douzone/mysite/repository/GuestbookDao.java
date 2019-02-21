@@ -9,12 +9,20 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.douzone.mysite.vo.GuestbookVo;
 
 @Repository
 public class GuestbookDao {
+	
+	@Autowired
+	private SqlSession sqlSession;
+	
 	public int delete( GuestbookVo vo ) {
 		int count = 0;
 		Connection conn = null;
@@ -54,55 +62,9 @@ public class GuestbookDao {
 	}
 	
 	public long insert(GuestbookVo vo) {
-		long count = 0;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			conn = getConnection();
-
-			String sql = 
-				" insert" + 
-				"   into guestbook" + 
-				" values ( null, ?, ?, ?, now() )";
-			pstmt = conn.prepareStatement(sql);
-
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getPassword());
-			pstmt.setString(3, vo.getMessage());
-
-			count = pstmt.executeUpdate();
-			
-			sql = "select last_insert_id()";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				count = rs.getLong(1);
-			}
-			
-		} catch (SQLException e) {
-			System.out.println("error :" + e);
-		} finally {
-			// 자원 정리
-			try {
-				if(rs != null) {
-					rs.close();
-				}
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return count;
+		sqlSession.insert("guestbook.insert", vo);
+		long no = vo.getNo();
+		return no;
 	}
 
 	public List<GuestbookVo> getList() {
