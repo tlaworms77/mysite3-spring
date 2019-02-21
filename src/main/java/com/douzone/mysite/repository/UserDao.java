@@ -6,6 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.annotation.sql.DataSourceDefinition;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.douzone.mysite.exception.UserDaoException;
@@ -13,30 +17,27 @@ import com.douzone.mysite.vo.UserVo;
 
 @Repository
 public class UserDao {
-
-	private Connection getConnection() throws SQLException {
-		Connection conn = null;
-		try {
-			// 1. 드라이버 로딩
-			Class.forName("com.mysql.jdbc.Driver");
-
-			// 2. 연결하기
-			String url = "jdbc:mysql://localhost/webdb?characterEncoding=utf8&serverTimezone=UTC";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-		} catch (ClassNotFoundException e) {
-			System.out.println("드러이버 로딩 실패:" + e);
-		}
-
-		return conn;
-	}
-
+	@Autowired
+	private DataSource dataSource;
+	
+	/*
+	 * private Connection getConnection() throws SQLException { Connection conn =
+	 * null; try { // 1. 드라이버 로딩 Class.forName("com.mysql.jdbc.Driver");
+	 * 
+	 * // 2. 연결하기 String url =
+	 * "jdbc:mysql://localhost/webdb?characterEncoding=utf8&serverTimezone=UTC";
+	 * conn = DriverManager.getConnection(url, "webdb", "webdb"); } catch
+	 * (ClassNotFoundException e) { System.out.println("드러이버 로딩 실패:" + e); }
+	 * 
+	 * return conn; }
+	 */
 	public int insert(UserVo vo) {
 		int count = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 			String sql = " inser" + "   into user" + " values ( null, ?, ?, ?, ?, now() )";
 			pstmt = conn.prepareStatement(sql);
@@ -76,7 +77,7 @@ public class UserDao {
 		ResultSet rs = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 			String sql = "select no, name from user where email=? and password=?";
 			pstmt = conn.prepareStatement(sql);
@@ -125,7 +126,7 @@ public class UserDao {
 		ResultSet rs = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 			String sql = "select name, email, gender from user where no = ?";
 			pstmt = conn.prepareStatement(sql);
@@ -175,19 +176,13 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 
 		try {
-			
-			conn = getConnection();
 
-			String sql = "update "
-								+ "user "
-					      + "set "
-					      		+ "name = ?, "
-					      		+ "password = ?, "
-					      		+ "gender = ? "
-					    + "where "
-					    		+ "no = ?";
+			conn = dataSource.getConnection();
+
+			String sql = "update " + "user " + "set " + "name = ?, " + "password = ?, " + "gender = ? " + "where "
+					+ "no = ?";
 			pstmt = conn.prepareStatement(sql);
-			
+
 			pstmt.setString(1, authUser.getName());
 			pstmt.setString(2, authUser.getPassword());
 			pstmt.setString(3, authUser.getGender());
@@ -223,7 +218,7 @@ public class UserDao {
 		ResultSet rs = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 			String sql = "select no, name from user where email=?";
 			pstmt = conn.prepareStatement(sql);
