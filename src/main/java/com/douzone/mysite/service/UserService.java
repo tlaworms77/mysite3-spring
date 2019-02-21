@@ -45,5 +45,5 @@ public class UserService {
 	public boolean modify(UserVo vo) {
 		return userDao.modify(vo);
 	}
-
+	
 }

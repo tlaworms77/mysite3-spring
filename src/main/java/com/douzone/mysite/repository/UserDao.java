@@ -39,7 +39,7 @@ public class UserDao {
 		try {
 			conn = dataSource.getConnection();
 
-			String sql = " inser" + "   into user" + " values ( null, ?, ?, ?, ?, now() )";
+			String sql = " insert" + "   into user" + " values ( null, ?, ?, ?, ?, now() )";
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, vo.getName());
