@@ -15,7 +15,32 @@
 		select no, name 
 		  from user 
 		 where email=#{email } 
-		   and password=#{password }
+		   and password= #{password }
 	]]>
 	</select>
+	
+	<select id="getByEmail" parameterType="string" resultType="uservo">
+	<![CDATA[
+		select no, name from user where email=#{value }
+	]]>
+	</select>
+	
+	<select id="getUserInfo" parameterType="long" resultType="uservo">
+		<![CDATA[
+			select name, email, gender 
+			  from user 
+			 where no=#{no }
+		]]>
+	</select>
+	
+	<update id="modify" parameterType="uservo">
+		<![CDATA[
+			update user 
+			   set name = #{name}, 
+			       password = #{password}, 
+			       gender = #{gender} 
+			 where no = #{no}
+		]]>
+	</update>
+	
 </mapper>

@@ -21,7 +21,7 @@
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="${pageContext.servletContext.contextPath }/board" method="get">
-					<input type="text" id="kwd" name="kwd" value="${param.kwd }">
+					<input type="text" id="kwd" name="kwd" value="${map.kwd }">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -33,8 +33,8 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>
-					<c:set var="count" value="${ fn:length(list) }"></c:set>
-					<c:forEach items="${ list }" var="vo" varStatus="status">
+					<c:set var="count" value="${ fn:length(map.list) }"></c:set>
+					<c:forEach items="${ map.list }" var="vo" varStatus="status">
 						<tr>
 							<td>${ count - status.index }</td>
 							<c:choose>
@@ -48,11 +48,11 @@
 									</td>
 								</c:otherwise>
 							</c:choose>
-							<td>${ vo.userNo.name }</td>
+							<td>${ vo.name }</td>
 							<td>${ vo.hit }</td>
 							<td>${ vo.writeDate }</td>
 							<td>
-							<c:if test="${not empty authuser && authuser.no == vo.userNo.no }">
+							<c:if test="${not empty authuser && authuser.no == vo.userNo }">
 							<a href="${ pageContext.servletContext.contextPath }/board/delete?no=${ vo.no }" class="del">삭제</a>
 							</c:if>
 							</td>
@@ -65,33 +65,33 @@
 					<ul>
 						<li>
 							<c:choose>
-								<c:when test="${ pageVo.pageNo == null || pageVo.pageNo < 1 }">
+								<c:when test="${ map.pageVo.pageNo == null || map.pageVo.pageNo < 1 }">
 									<a href="${ pageContext.servletContext.contextPath }/board">◀</a>
 								</c:when>
 								<c:otherwise>
-									<a href="${ pageContext.servletContext.contextPath }/board?no=${pageVo.prevPageNo}&kwd=${param.kwd}">◀</a>
+									<a href="${ pageContext.servletContext.contextPath }/board?no=${map.pageVo.prevPageNo}&kwd=${map.kwd}">◀</a>
 								</c:otherwise>
 							</c:choose>
 						</li>
-						<c:forEach var="i" begin="${ pageVo.startPageNo }" end="${ pageVo.endPageNo }" step="1">
+						<c:forEach var="i" begin="${ map.pageVo.startPageNo }" end="${ map.pageVo.endPageNo }" step="1">
 							<c:choose>
-								<c:when test="${ pageVo.pageNo == i }">
-									<li class="selected"><a href="${ pageContext.servletContext.contextPath }/board?no=${pageVo.pageNo}&kwd=${param.kwd}">${pageVo.pageNo}</a></li>
+								<c:when test="${ map.pageVo.pageNo == i }">
+									<li class="selected"><a href="${ pageContext.servletContext.contextPath }/board?no=${map.pageVo.pageNo}&kwd=${map.kwd}">${map.pageVo.pageNo}</a></li>
 								</c:when>
-								<c:when test="${ pageVo.pageSize < i }">
+								<c:when test="${ map.pageVo.pageSize < i }">
 									<li>${ i }</li>
 								</c:when>
 								<c:otherwise>
-									<li><a href="${ pageContext.servletContext.contextPath }/board?no=${i}&kwd=${param.kwd}">${i}</a></li>
+									<li><a href="${ pageContext.servletContext.contextPath }/board?no=${i}&kwd=${map.kwd}">${i}</a></li>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
 						<c:choose>
-							<c:when test="${ pageVo.pageNo < pageVo.pageSize }">
-								<li><a href="${ pageContext.servletContext.contextPath }/board?no=${pageVo.nextPageNo}&kwd=${param.kwd}">▶</a></li>
+							<c:when test="${ map.pageVo.pageNo < map.pageVo.pageSize }">
+								<li><a href="${ pageContext.servletContext.contextPath }/board?no=${map.pageVo.nextPageNo}&kwd=${map.kwd}">▶</a></li>
 							</c:when>
 							<c:otherwise>
-								<li><a href="${ pageContext.servletContext.contextPath }/board?no=${pageVo.pageNo}&kwd=${param.kwd}">▶</a></li>
+								<li><a href="${ pageContext.servletContext.contextPath }/board?no=${map.pageVo.pageNo}&kwd=${map.kwd}">▶</a></li>
 							</c:otherwise>
 						</c:choose>
 					</ul>

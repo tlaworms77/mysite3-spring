@@ -14,9 +14,10 @@
 	</welcome-file-list>
 
 	<!-- Context(전역) Parameter -->
+	<!-- classpath : src/main/resources or java 위치 class위치 (war)  -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/applicationContext.xml</param-value>
+		<param-value>/WEB-INF/applicationContext.xml</param-value><!-- <param-value>classpath:applicationContext.xml</param-value>  -->
 	</context-param>
 
 	<!-- Context Parameter -->
@@ -45,9 +46,11 @@
 	</filter-mapping>
 
 	<!-- front controller -->
+	<!-- Dispatcher Servlet  -->
 	<servlet>
 		<servlet-name>spring</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>

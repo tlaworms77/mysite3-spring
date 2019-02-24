@@ -77,11 +77,14 @@ public class UserController {
 
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
 	public String modify(HttpSession session, Model model) {
+		/* 접근제어 */
 		UserVo authUser = null;
 		if (session != null) {
 			authUser = (UserVo) session.getAttribute("authuser");
+			System.out.println(authUser);
 		}
 		if (authUser == null) {
+			System.out.println(authUser);
 			return "redirect:/";
 		}
 
@@ -98,7 +101,6 @@ public class UserController {
 		}
 		
 		vo.setNo(((UserVo)session.getAttribute("authuser")).getNo());
-		
 		boolean modifySuccess = userService.modify(vo);
 		
 		if(!modifySuccess) {

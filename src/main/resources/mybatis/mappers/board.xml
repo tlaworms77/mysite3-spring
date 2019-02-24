@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<select id="getList" parameterType="string" resultType="boardvo">
+		<choose>
+			<when test="kwd == null">
+				select a.no as no,
+					   a.title as title,
+					   a.contents as contents,
+					   a.write_date as writeDate,
+					   a.hit as hit,
+					   a.g_no as groupNo,
+					   a.o_no as orderNo,
+					   a.depth as depth,
+					   a.user_no as userNo,
+					   b.name as name 
+				  from board a, 
+				  	   user b 
+				 where a.user_no = b.no 
+			  order by a.g_no desc, 
+			  		   a.o_no asc
+			</when>
+			<otherwise>
+				<![CDATA[
+			select a.no as no,
+				   a.title as title,
+				   a.contents as contents,
+				   a.write_date as writeDate,
+				   a.hit as hit,
+				   a.g_no as groupNo,
+				   a.o_no as orderNo,
+				   a.depth as depth,
+				   a.user_no as userNo,
+				   b.name as name 
+			  from board a, 
+			  	   user b 
+			 where a.user_no = b.no 
+			   and (a.title like '%${kwd }%' or a.contents like '%${kwd }%') 
+		  order by a.g_no desc, 
+		  		   a.o_no asc
+				]]>
+			</otherwise>
+		</choose>
+	</select>
+	<!-- query안은 아무꺼나 써도된다. -->
+	<!-- 밖에서 dao 에서 관여할 때는 '' (x) -->
+	<!-- 여기에서 관여할 때는 '${ }' (Oo) -->
+	<select id="getTotalCount" parameterType="string"
+		resultType="int">
+		<![CDATA[
+		select count(*)
+		  from board
+		]]>
+		<if test="_parameter != null and _parameter!=''">
+
+		</if>
+	</select>
+	
+	<select id="getView" parameterType="long" resultType="boardvo">
+		<![CDATA[
+		select no,
+			   title,
+			   contents,
+			   write_date as writeDate,
+			   hit,
+			   g_no as groupNo,
+			   o_no as orderNo,
+			   depth,
+			   user_no as userNo 
+		  from board 
+		 where no = #{no }
+		]]>
+	</select>
+	
+	<update id="modify" parameterType="boardvo">
+		<![CDATA[
+		update board 
+		   set title=#{title }, 
+			   contents=#{contents } 
+		 where no = #{no }
+		 ]]>
+	</update>
+	
+	<update id="updateOrder" parameterType="boardvo">
+		<![CDATA[
+		update board 
+		   set o_no=#{orderNo } 
+		 where no=#{no }
+		]]>
+	</update>
+	
+	<select id="getOrderNo" parameterType="long" resultType="int">
+		<![CDATA[
+		select o_no 
+		  from board 
+		 where no=#{no }
+		]]>
+	</select>
+	
+	<select id="getTotalPage" resultType="int">
+		<![CDATA[
+		select count(*) 
+		  from board
+		]]>
+	</select>
+	
+	<delete id="deleteByNo" parameterType="long">
+		<![CDATA[
+		delete 
+		  from board 
+		 where no = #{no }
+		]]>
+	</delete>
+	
+	<select id="getDeleteCheck" parameterType="uservo" resultType="boolean">
+		<![CDATA[
+		select * 
+		  from board a, 
+		  	   user b 
+		 where a.user_no = b.no 
+		   and a.no = #{no } 
+		   and password = #{password }
+		]]>
+	</select>
+	
+	<select id="getDeleteCheckList" parameterType="long" resultType="boardvo">
+		<![CDATA[
+		select * 
+		  from board 
+		 where g_no = (select b.g_no from board b where b.no = #{no }) 
+		   and o_no >= (select c.o_no from board c where c.no = #{no }) 
+	  order by o_no asc
+		]]>
+	</select>
+	
+	<select id="getReplyList" parameterType="long"  resultType="boardvo">
+		select a.no as no,
+			   a.title as title,
+			   a.contents as contents,
+			   a.write_date as writeDate,
+			   a.hit as hit,
+			   a.g_no as groupNo,
+			   a.o_no as orderNo,
+			   a.depth as depth,
+			   a.user_no as userNo,
+		   	   b.name as name
+	  from board a, 
+		   user b 
+	 where a.user_no = b.no 
+	   and a.g_no=(select c.g_no from board c where c.no=#{no}) 
+	   and a.o_no>(select d.o_no from board d where d.no=#{no}) 
+  order by a.o_no asc;
+	</select>
+	
+	<update id="upHit" parameterType="long">
+		update board 
+		   set hit = hit + 1 
+		 where no=#{no }	   
+	</update>
+	
+	<insert id="insert" parameterType="boardvo">
+		<choose>
+			<when test="groupNo==0">
+				<![CDATA[
+				insert
+				  into board
+				values ( null,
+						 #{title },
+						 #{contents },
+						 now(),
+						 0,
+						 ( select ifnull( max( a.g_no ), 0 ) + 1
+						     from board a ),
+						 1, 
+						 0, 
+						 #{userNo } )
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				insert 
+				  into board 
+				values (null, 
+						#{title }, 
+						#{contents }, 
+						now(), 
+						0, 
+						(SELECT c.g_no from board c where c.no = #{no}), 
+						(SELECT ifnull(MAX(b.o_no) + 1, 1) FROM board b where b.g_no = (SELECT d.g_no from board d where d.no = #{no})), 
+						(SELECT ifnull(MAX(a.depth)+10, 10) FROM board a where a.no = #{no}), #{userNo})				
+				]]>
+			</otherwise>
+		</choose>
+	</insert>
+</mapper>

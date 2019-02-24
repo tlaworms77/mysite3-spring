@@ -17,9 +17,9 @@
 				<form class="board-form" method="post" action="${ pageContext.servletContext.contextPath }/board/reply">
 					<input type="hidden" name = "no" value="${ param.no }">
 					<input type="hidden" name= name value="${ authuser.name }">
-					<%-- <input type="hidden" name = "groupNo" value="${ param.groupNo }">
+					<input type="hidden" name = "groupNo" value="${ param.groupNo }">
 					<input type="hidden" name = "orderNo" value="${ param.orderNo }">
-					<input type="hidden" name = "authuserNo" value="${ param.authuser }"> --%>
+					<input type="hidden" name = "authuserNo" value="${ param.authuser }">
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글쓰기</th>

@@ -30,10 +30,11 @@
 		class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName"
 			value="com.mysql.jdbc.Driver" />
-		<property name="url"
-			value="jdbc:mysql://localhost:3306/webdb" />
+		<property name="url" value="jdbc:mysql://localhost:3306/webdb?characterEncoding=utf8&amp;serverTimezone=UTC" />
 		<property name="username" value="webdb" />
 		<property name="password" value="webdb" />
+		<property name="initialSize" value="20" />
+		<property name="maxActive" value="20" />
 	</bean>
 
 	<!-- MyBatis SqlSessionFactoryBean -->
@@ -42,8 +43,7 @@
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<!-- 마이바티스 전체 설정 -->
-		<property name="configLocation"
-			value="classpath:mybatis/configuration.xml" />
+		<property name="configLocation" value="classpath:mybatis/configuration.xml" />
 	</bean>
 
 	<!-- MyBatis SqlSessionTemplate -->

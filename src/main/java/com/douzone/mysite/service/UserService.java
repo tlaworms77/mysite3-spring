@@ -43,7 +43,8 @@ public class UserService {
 	}
 
 	public boolean modify(UserVo vo) {
-		return userDao.modify(vo);
+		boolean result = 1 == userDao.modify(vo);
+		return result;
 	}
 	
 }

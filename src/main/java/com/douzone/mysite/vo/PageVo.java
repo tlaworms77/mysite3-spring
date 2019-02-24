@@ -91,7 +91,6 @@ public class PageVo {
 		setStartPageNo(value);
 		setEndPageNo(value);
 		
-		
 	}
 	@Override
 	public String toString() {
