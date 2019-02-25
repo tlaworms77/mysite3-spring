@@ -31,8 +31,8 @@ public class UserService {
 		// 2. email 주소 확인하는 메일 보내기
 	}
 
-	public UserVo loginCheck(UserVo vo) {
-		UserVo userVo = userDao.loginCheck(vo.getEmail(), vo.getPassword());
+	public UserVo loginCheck(String email, String password) {
+		UserVo userVo = userDao.loginCheck(email, password);
 		return userVo;
 	}
 

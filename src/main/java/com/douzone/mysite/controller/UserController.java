@@ -36,17 +36,13 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(HttpSession session) {
-		System.out.println("authuser : " + session.getAttribute("authuser"));
-		if (session.getAttribute("authuser") != null) {
-			return "redirect:/";
-		}
+	public String login() {
 		return "/user/login";
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(HttpSession session, Model model, @ModelAttribute UserVo vo) {
-		UserVo authuser = userService.loginCheck(vo);
+	public String login(HttpSession session, Model model, String email, String password) {
+		UserVo authuser = userService.loginCheck(email, password);
 
 		if (authuser == null) {
 			model.addAttribute("result", "fail");
@@ -55,25 +51,25 @@ public class UserController {
 		session.setAttribute("authuser", authuser);
 		return "redirect:/";
 	}
-
-	@RequestMapping("/logout")
-	public String logout(HttpSession session) {
-		if (session != null && session.getAttribute("authuser") != null) {
-			// logout 처리
-			// session 을 날림
-			session.removeAttribute("authuser");
-			session.invalidate();
-			return "redirect:/";
-		}
-
-		// 거의 없는 경우이지만 인증이 안된 상황에서 접근한 상황 logout을
-		UserVo authUser = (UserVo) session.getAttribute("authuser");
-		if (authUser == null) {
-			return "redirect:/";
-		}
-
-		return "redirect:/";
-	}
+// interceptoer 로 logout 처리
+//	@RequestMapping("/logout")
+//	public String logout(HttpSession session) {
+//		if (session != null && session.getAttribute("authuser") != null) {
+//			// logout 처리
+//			// session 을 날림
+//			session.removeAttribute("authuser");
+//			session.invalidate();
+//			return "redirect:/";
+//		}
+//
+//		// 거의 없는 경우이지만 인증이 안된 상황에서 접근한 상황 logout을
+//		UserVo authUser = (UserVo) session.getAttribute("authuser");
+//		if (authUser == null) {
+//			return "redirect:/";
+//		}
+//
+//		return "redirect:/";
+//	}
 
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
 	public String modify(HttpSession session, Model model) {
