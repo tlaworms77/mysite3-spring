@@ -7,18 +7,28 @@
 			<ul>
 				<c:choose>
 					<c:when test='${ param.menu == "main" }'>
-						<li class="selected"><a href="${ pageContext.servletContext.contextPath }">심재근</a></li>
-						<li><a href="${ pageContext.servletContext.contextPath }/guestbook">방명록</a></li>
-						<li><a href="${ pageContext.servletContext.contextPath }/guestbook?a=ajax">방명록(Ajax)</a></li>
-						<li><a href="${ pageContext.servletContext.contextPath }/board">게시판</a></li>
+						<div id="navigation">
+							<h2>카테고리</h2>
+							<ul>
+								<li><a href="">닥치고 스프링</a></li>
+								<li><a href="">스프링 스터디</a></li>
+								<li><a href="">스프링 프로젝트</a></li>
+								<li><a href="">기타</a></li>
+							</ul>
+						</div>
 					</c:when>
 					<c:when test='${ param.menu == "guestbook" }'>
-						<li><a href="${ pageContext.servletContext.contextPath }">심재근</a></li>
-						<li class="selected"><a href="${ pageContext.servletContext.contextPath }/guestbook">방명록</a></li>
-						<li><a href="${ pageContext.servletContext.contextPath }/guestbook?a=ajax">방명록(Ajax)</a></li>
-						<li><a href="${ pageContext.servletContext.contextPath }/board">게시판</a></li>
+						<div id="navigation">
+							<h2>카테고리</h2>
+							<ul>
+								<li><a href="">닥치고 스프링</a></li>
+								<li><a href="">스프링 스터디</a></li>
+								<li><a href="">스프링 프로젝트</a></li>
+								<li><a href="">기타</a></li>
+							</ul>
+						</div>
 					</c:when>
-					<c:when test='${ param.menu == "guestbook-ajax"}'>
+					<%-- <c:when test='${ param.menu == "guestbook-ajax"}'>
 						<li><a href="${ pageContext.servletContext.contextPath }">심재근</a></li>
 						<li><a href="${ pageContext.servletContext.contextPath }/guestbook">방명록</a></li>
 						<li class="selected"><a href="${ pageContext.servletContext.contextPath }/guestbook?a=ajax">방명록(Ajax)</a></li>
@@ -35,7 +45,7 @@
 						<li><a href="${ pageContext.servletContext.contextPath }/guestbook">방명록</a></li>
 						<li><a href="${ pageContext.servletContext.contextPath }/guestbook?a=ajax">방명록(Ajax)</a></li>
 						<li><a href="${ pageContext.servletContext.contextPath }/board">게시판</a></li>
-					</c:otherwise>
+					</c:otherwise> --%>
 				</c:choose>
 			</ul>
 		</div>
